@@ -9,5 +9,5 @@ export default defineConfig({
       "@": path.resolve(__dirname, "./src"),
     },
   },
-  base: "conditional-form-validation",
+  base: "/conditional-form-validation",
 });
