@@ -3,7 +3,6 @@ import { Input } from "@/components/ui/input";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Category } from "./types";
-import { useEffect } from "react";
 import {
   Form,
   FormField,
@@ -156,14 +155,6 @@ export default function MultipleDiscriminatedValue() {
   const includeEmail = watch("includeEmail");
   const category = watch("category");
   const includeFile = watch("includeFile");
-  const file = watch("file");
-  console.log("file", file);
-
-  useEffect(() => {
-    if (category === "Fire") {
-      setValue("includeEmail", true);
-    }
-  }, [category, setValue]);
 
   return (
     <div>
@@ -239,7 +230,15 @@ export default function MultipleDiscriminatedValue() {
             render={({ field }) => (
               <FormItem>
                 <FormLabel>Category</FormLabel>
-                <Select onValueChange={field.onChange} defaultValue={field.value}>
+                <Select
+                  onValueChange={(value) => {
+                    if (value == "Fire") {
+                      setValue("includeEmail", true, { shouldValidate: true });
+                    }
+                    field.onChange(value);
+                  }}
+                  defaultValue={field.value}
+                >
                   <FormControl>
                     <SelectTrigger>
                       <SelectValue placeholder="Choose a category" />
@@ -299,7 +298,7 @@ export default function MultipleDiscriminatedValue() {
                   <Checkbox
                     checked={field.value}
                     onCheckedChange={field.onChange}
-                    disabled={category === "Fire"}
+                    // disabled={category === "Fire"}
                   />
                 </FormControl>
                 <FormMessage />

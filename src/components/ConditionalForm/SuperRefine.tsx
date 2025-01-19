@@ -20,7 +20,6 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { useEffect } from "react";
 
 const FormSchema = z
   .object({
@@ -109,14 +108,6 @@ export default function SuperRefine() {
   const includeEmail = watch("includeEmail");
   const category = watch("category");
   const includeFile = watch("includeFile");
-  const file = watch("file");
-  console.log("file", file);
-
-  useEffect(() => {
-    if (category === "Fire") {
-      setValue("includeEmail", true);
-    }
-  }, [category, setValue]);
 
   return (
     <div>
@@ -192,7 +183,15 @@ export default function SuperRefine() {
             render={({ field }) => (
               <FormItem>
                 <FormLabel>Category</FormLabel>
-                <Select onValueChange={field.onChange} defaultValue={field.value}>
+                <Select
+                  onValueChange={(value) => {
+                    if (value == "Fire") {
+                      setValue("includeEmail", true, { shouldValidate: true });
+                    }
+                    field.onChange(value);
+                  }}
+                  defaultValue={field.value}
+                >
                   <FormControl>
                     <SelectTrigger>
                       <SelectValue placeholder="Choose a category" />
